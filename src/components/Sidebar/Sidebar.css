@@ -1,0 +1,139 @@
+/* Sidebar Container */
+.sidebar {
+  width: 80px; /* Narrow sidebar */
+  /* background: linear-gradient(180deg, rgba(12, 12, 12, 0.7), rgba(240, 244, 248, 1)); */
+  background-color: white;
+  padding-top: 30px;
+  position: fixed;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid black; */
+  height: auto; /* Sidebar height adjusts to content */
+  max-height: 100vh; /* Ensures the sidebar doesn’t overflow past the screen */
+  transition: width 0.3s ease;
+  margin-left: 4vh;
+}
+
+/* When Sidebar is closed (mobile view) */
+.sidebar.closed {
+  width: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.sidebar-header .logo {
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.sidebar-header h2 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  display: none;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  margin-top: -3vh;
+  /* No flex-grow since we don't want it to fill the remaining space */
+}
+
+/* Sidebar Menu Item */
+.sidebar-menu li {
+  padding: 12px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  transition: background 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebar-menu li:hover {
+  background: #e0e7ff;
+}
+
+/* Sidebar Item Icon */
+.sidebar-menu li svg {
+  margin-bottom: 5px;
+}
+
+/* Sidebar Item Text */
+.sidebar-menu li span {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #333;
+}
+
+/* Active Tab Styling */
+.sidebar-menu li.active {
+  background: #c7d2fe;
+  color: #1e40af;
+  
+}
+
+.sidebar-menu li.active span {
+  color: #1e40af;
+}
+
+/* Mobile Menu Toggle Button */
+.menu-toggle {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background:   sparent;
+  border: none;
+  font-size: 30px;
+  color: #333;
+  z-index: 100;
+}
+
+/* Responsive Design: Media Queries */
+@media (max-width: 768px) {
+  /* On mobile devices */
+  .sidebar {
+    width: 100px; /* Expand sidebar on mobile */
+  }
+
+  .sidebar-header h2 {
+    display: block;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .app-container.sidebar-open .main-content {
+    margin-left: 100px; /* Adjust when sidebar is open */
+  }
+
+  .sidebar.closed {
+    width: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+}

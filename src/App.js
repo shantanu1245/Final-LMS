@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Dashboard from './components/Dashboard/Dashboard';
+import Sidebar from './components/Sidebar/Sidebar';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state (open/closed)
+
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen); // Toggle sidebar visibility
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+      <Sidebar onTabChange={handleTabChange} activeTab={activeTab} sidebarOpen={sidebarOpen} />
+      <div className="main-content">
+        <button className="menu-toggle" onClick={toggleSidebar}>
+          ☰
+        </button>
+        <Dashboard activeTab={activeTab} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;

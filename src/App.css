@@ -1,38 +1,69 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Overall App Layout */
+.app-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 99.9vh; /* Use nearly full viewport height */
+  background-image: url('./Assets/background.png');
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+/* Menu Toggle Button */
+.menu-toggle {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  color: #333;
+  z-index: 100;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Main Content Area */
+.main-content {
+  padding: 20px;
+  margin-left: 130px; /* Space for the fixed sidebar */
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 30px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: margin-left 0.3s ease;
+  width: 100%;
+  height: 90vh; /* Fixed height for content area */
+  overflow-y: auto; /* Enables vertical scrolling if content overflows */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  /* Sidebar */
+  .sidebar {
+    width: 100px; /* Smaller sidebar on mobile */
   }
-  to {
-    transform: rotate(360deg);
+
+  .sidebar.closed {
+    width: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  /* Main content adjustments when sidebar is collapsed */
+  .app-container.sidebar-open .main-content {
+    margin-left: 100px; /* Adjust when sidebar is open */
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 80vh; /* Slightly reduced height on mobile */
+  }
+
+  /* Menu Toggle Button (Hamburger) */
+  .menu-toggle {
+    display: block;
   }
 }
