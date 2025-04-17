@@ -1,7 +1,6 @@
 /* Sidebar Container */
 .sidebar {
-  width: 80px; /* Narrow sidebar */
-  /* background: linear-gradient(180deg, rgba(12, 12, 12, 0.7), rgba(240, 244, 248, 1)); */
+  width: 80px;
   background-color: white;
   padding-top: 30px;
   position: fixed;
@@ -11,16 +10,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* border: 1px solid black; */
-  height: auto; /* Sidebar height adjusts to content */
-  max-height: 100vh; /* Ensures the sidebar doesn’t overflow past the screen */
-  transition: width 0.3s ease;
+  height: auto;
+  max-height: 90vh;
+  transition: all 0.3s ease;
   margin-left: 4vh;
+  z-index: 100;
 }
 
-/* When Sidebar is closed (mobile view) */
+/* When Sidebar is closed */
 .sidebar.closed {
   width: 0;
+  padding: 0;
+  margin-left: 0;
   visibility: hidden;
   opacity: 0;
 }
@@ -51,7 +52,6 @@
   padding: 0;
   width: 100%;
   margin-top: -3vh;
-  /* No flex-grow since we don't want it to fill the remaining space */
 }
 
 /* Sidebar Menu Item */
@@ -72,68 +72,113 @@
   background: #e0e7ff;
 }
 
-/* Sidebar Item Icon */
 .sidebar-menu li svg {
   margin-bottom: 5px;
 }
 
-/* Sidebar Item Text */
 .sidebar-menu li span {
   margin-top: 5px;
   font-size: 12px;
   color: #333;
 }
 
-/* Active Tab Styling */
 .sidebar-menu li.active {
   background: #c7d2fe;
   color: #1e40af;
-  
 }
 
 .sidebar-menu li.active span {
   color: #1e40af;
 }
 
-/* Mobile Menu Toggle Button */
-.menu-toggle {
+.mobile-bottom-nav {
   display: none;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background:   sparent;
-  border: none;
-  font-size: 30px;
-  color: #333;
-  z-index: 100;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
+  padding: 8px 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Design: Media Queries */
+.bottom-nav-menu {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 8px; /* Add this line for gap between items */
+}
+
+.bottom-nav-menu li {
+  padding: 8px 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  color: #666;
+  font-size: 12px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  /* Remove any existing margin/padding that might conflict */
+  margin: 0;
+}
+
+.bottom-nav-menu li.active {
+  color: #1e40af;
+}
+
+.bottom-nav-menu li svg {
+  margin-bottom: 3px;
+}
+
+/* Mobile Tooltip */
+.mobile-tooltip {
+  position: fixed;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1100;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease-in-out;
+  max-width: 120px;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  /* On mobile devices */
   .sidebar {
-    width: 100px; /* Expand sidebar on mobile */
+    display: none;
   }
-
-  .sidebar-header h2 {
-    display: block;
+  
+  .mobile-bottom-nav {
+    display: flex;
   }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  .main-content {
-    margin-left: 0;
-  }
-
+  
   .app-container.sidebar-open .main-content {
-    margin-left: 100px; /* Adjust when sidebar is open */
+    margin-left: 0;
+    padding-bottom: 70px;
   }
+}
 
-  .sidebar.closed {
-    width: 0;
-    visibility: hidden;
-    opacity: 0;
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+  
+  .sidebar {
+    display: flex;
   }
 }

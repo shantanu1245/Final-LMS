@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { 
   FaPhoneAlt, 
   FaCalendarAlt, 
   FaUsers, 
   FaChartLine, 
-  FaShoppingBag,
   FaUserTie,
   FaFileSignature,
-  FaDatabase,
   FaBell,
   FaTasks,
   FaMoneyBillWave,
@@ -18,11 +16,14 @@ import './MainScreen.css';
 // Card Component
 const StatCard = ({ icon, title, value, trend, color }) => {
   return (
-    <div className="stat-card" style={{ borderLeft: `4px solid ${color}` }}>
+    <div className="stat-card" style={{ 
+      borderLeft: `4px solid ${color}`,
+      backgroundColor: 'var(--card-bg)'
+    }}>
       <div className="card-icon" style={{ color }}>{icon}</div>
       <div className="card-content">
-        <h4>{title}</h4>
-        <p className="value">{value}</p>
+        <h4 style={{ color: 'var(--text-color)' }}>{title}</h4>
+        <p className="value" style={{ color: 'var(--primary-color)' }}>{value}</p>
         <p className={`trend ${trend > 0 ? 'positive' : 'negative'}`}>
           {trend > 0 ? `↑ ${trend}%` : `↓ ${Math.abs(trend)}%`}
         </p>
@@ -41,11 +42,18 @@ const ActivityItem = ({ type, time, person, status }) => {
   };
 
   return (
-    <div className="activity-item">
-      <div className="activity-icon">{icons[type]}</div>
+    <div className="activity-item" style={{ 
+      backgroundColor: 'var(--card-bg)',
+      borderBottom: '1px solid var(--border-color)'
+    }}>
+      <div className="activity-icon" style={{ color: 'var(--primary-color)' }}>
+        {icons[type]}
+      </div>
       <div className="activity-details">
-        <p className="activity-time">{time}</p>
-        <h5>{person}</h5>
+        <p className="activity-time" style={{ color: 'var(--text-secondary)' }}>
+          {time}
+        </p>
+        <h5 style={{ color: 'var(--text-color)' }}>{person}</h5>
         <span className={`status ${status}`}>{status}</span>
       </div>
     </div>
@@ -53,13 +61,20 @@ const ActivityItem = ({ type, time, person, status }) => {
 };
 
 export default function MainScreen() {
+
   return (
-    <div className="dashboard-container">
+    <div className={`dashboard-container`}>
       {/* Header */}
-      <header className="dashboard-header">
-        <h2>CRM Dashboard</h2>
+      <header className="dashboard-header" style={{ 
+        backgroundColor: 'var(--header-bg)',
+        borderBottom: '1px solid var(--border-color)'
+      }}>
+        <h2 style={{ color: 'var(--text-color)' }}>CRM Dashboard</h2>
         <div className="header-actions">
-          <button className="notification-btn">
+          <button className="notification-btn" style={{
+            backgroundColor: 'var(--card-bg)',
+            color: 'var(--text-color)'
+          }}>
             <FaBell />
             <span className="badge">3</span>
           </button>
@@ -120,8 +135,14 @@ export default function MainScreen() {
         {/* Left Column */}
         <div className="content-column">
           {/* Upcoming Activities */}
-          <div className="activity-card">
-            <h3><FaRegClock /> Upcoming Activities</h3>
+          <div className="activity-card" style={{ 
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--border-color)'
+          }}>
+            <h3 style={{ color: 'var(--text-color)' }}>
+              <FaRegClock style={{ color: 'var(--primary-color)', marginRight: '8px' }} /> 
+              Upcoming Activities
+            </h3>
             <div className="activity-list">
               <ActivityItem 
                 type="meeting" 
@@ -145,9 +166,15 @@ export default function MainScreen() {
           </div>
 
           {/* Performance Chart */}
-          <div className="chart-card">
-            <h3><FaChartLine /> Agent Performance</h3>
-            <div className="chart-placeholder">
+          <div className="chart-card" style={{ 
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--border-color)'
+          }}>
+            <h3 style={{ color: 'var(--text-color)' }}>
+              <FaChartLine style={{ color: 'var(--primary-color)', marginRight: '8px' }} /> 
+              Agent Performance
+            </h3>
+            <div className="chart-placeholder" style={{ color: 'var(--text-secondary)' }}>
               {/* Chart would go here */}
               <p>Performance metrics visualization</p>
             </div>
@@ -157,12 +184,18 @@ export default function MainScreen() {
         {/* Right Column */}
         <div className="content-column">
           {/* Recent Leads */}
-          <div className="leads-card">
-            <h3><FaUserTie /> Recent Leads</h3>
+          <div className="leads-card" style={{ 
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--border-color)'
+          }}>
+            <h3 style={{ color: 'var(--text-color)' }}>
+              <FaUserTie style={{ color: 'var(--primary-color)', marginRight: '8px' }} /> 
+              Recent Leads
+            </h3>
             <div className="leads-table">
-              <table>
+              <table style={{ color: 'var(--text-color)' }}>
                 <thead>
-                  <tr>
+                  <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                     <th>Name</th>
                     <th>Company</th>
                     <th>Status</th>
@@ -170,45 +203,56 @@ export default function MainScreen() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Michael Chen</td>
-                    <td>Digital Innovations</td>
-                    <td><span className="status new">New</span></td>
-                    <td><button>Contact</button></td>
-                  </tr>
-                  <tr>
-                    <td>Emily Rodriguez</td>
-                    <td>Cloud Systems</td>
-                    <td><span className="status contacted">Contacted</span></td>
-                    <td><button>Follow Up</button></td>
-                  </tr>
-                  <tr>
-                    <td>David Kim</td>
-                    <td>AI Ventures</td>
-                    <td><span className="status qualified">Qualified</span></td>
-                    <td><button>Schedule</button></td>
-                  </tr>
+                  {[
+                    { name: 'Michael Chen', company: 'Digital Innovations', status: 'new' },
+                    { name: 'Emily Rodriguez', company: 'Cloud Systems', status: 'contacted' },
+                    { name: 'David Kim', company: 'AI Ventures', status: 'qualified' }
+                  ].map((lead, index) => (
+                    <tr key={index} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td>{lead.name}</td>
+                      <td>{lead.company}</td>
+                      <td>
+                        <span className={`status ${lead.status}`}>{lead.status}</span>
+                      </td>
+                      <td>
+                        <button style={{ 
+                          backgroundColor: 'var(--primary-color)',
+                          color: 'white'
+                        }}>
+                          {lead.status === 'new' ? 'Contact' : lead.status === 'contacted' ? 'Follow Up' : 'Schedule'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="quick-actions">
-            <h3>Quick Actions</h3>
+          <div className="quick-actions" style={{ 
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--border-color)'
+          }}>
+            <h3 style={{ color: 'var(--text-color)' }}>Quick Actions</h3>
             <div className="action-buttons">
-              <button className="action-btn">
-                <FaPhoneAlt /> New Call
-              </button>
-              <button className="action-btn">
-                <FaCalendarAlt /> Schedule Meeting
-              </button>
-              <button className="action-btn">
-                <FaUserTie /> Add Lead
-              </button>
-              <button className="action-btn">
-                <FaFileSignature /> Create Contract
-              </button>
+              {[
+                { icon: <FaPhoneAlt />, label: 'New Call' },
+                { icon: <FaCalendarAlt />, label: 'Schedule Meeting' },
+                { icon: <FaUserTie />, label: 'Add Lead' },
+                { icon: <FaFileSignature />, label: 'Create Contract' }
+              ].map((action, index) => (
+                <button 
+                  key={index} 
+                  className="action-btn"
+                  style={{
+                    backgroundColor: 'var(--primary-color)',
+                    color: 'white'
+                  }}
+                >
+                  {action.icon} {action.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>

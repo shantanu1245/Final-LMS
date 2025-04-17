@@ -1,48 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Sidebar.css';
-import { FaHome, FaBriefcase, FaUsers, FaRegUser, FaCog, FaTasks, FaFileAlt, FaGlobeAmericas, FaChartLine } from 'react-icons/fa';
+import { FaHome, FaBriefcase, FaUsers, FaRegUser, FaTasks, FaGlobeAmericas } from 'react-icons/fa';
 
 const Sidebar = ({ onTabChange, activeTab, sidebarOpen }) => {
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (item, event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setHoveredItem(item);
+    setTooltipPosition({
+      x: rect.left + rect.width / 2,
+      y: window.innerHeight - rect.top + 10
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredItem(null);
+  };
+
+  const menuItems = [
+    { tab: 'Dashboard', icon: <FaHome size={20} /> },
+    { tab: 'Leads', icon: <FaBriefcase size={20} /> },
+    { tab: 'Agents', icon: <FaTasks size={20} /> },
+    { tab: 'Tasks', icon: <FaUsers size={20} /> },
+    { tab: 'Meetings', icon: <FaRegUser size={20} /> },
+    { tab: 'Settings', icon: <FaGlobeAmericas size={20} /> },
+    { tab: 'Profile', icon: <FaRegUser size={20} /> }
+  ];
+
   return (
-    <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
-      <div className="sidebar-header">
-        <div className="logo">
-          <FaHome size={32} />
+    <>
+      {/* Desktop Sidebar */}
+      <div className={`sidebar desktop-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+        <div className="sidebar-header">
+          <div className="logo">
+            <FaHome size={32} />
+          </div>
+          <h2>Dashboard</h2>
         </div>
-        <h2>Dashboard</h2>
+        <ul className="sidebar-menu">
+          {menuItems.map((item) => (
+            <li 
+              key={item.tab}
+              className={activeTab === item.tab ? 'active' : ''}
+              onClick={() => onTabChange(item.tab)}
+            >
+              {item.icon}
+              <span>{item.tab}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul className="sidebar-menu">
-        <li className={activeTab === 'Dashboard' ? 'active' : ''} onClick={() => onTabChange('Dashboard')}>
-          <FaHome size={20} />
-          <span>Dashboard</span>
-        </li>
-        <li className={activeTab === 'Leads' ? 'active' : ''} onClick={() => onTabChange('Leads')}>
-          <FaBriefcase size={20} />
-          <span>Leads</span>
-        </li>
-        <li className={activeTab === 'Agents' ? 'active' : ''} onClick={() => onTabChange('Agents')}>
-          <FaTasks size={20} />
-          <span>Agents</span>
-        </li>
-        <li className={activeTab === 'Tasks' ? 'active' : ''} onClick={() => onTabChange('Tasks')}>
-          <FaUsers size={20} />
-          <span>Tasks</span>
-        </li>
-        <li className={activeTab === 'Meetings' ? 'active' : ''} onClick={() => onTabChange('Meetings')}>
-          <FaRegUser size={20} />
-          <span>Meetings</span>
-        </li>
-        <li className={activeTab === 'Settings' ? 'active' : ''} onClick={() => onTabChange('Settings')}>
-          <FaGlobeAmericas size={20} />
-          <span>Settings</span>
-        </li>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="mobile-bottom-nav">
+        <ul className="bottom-nav-menu">
+          {menuItems.map((item) => (
+            <li 
+              key={item.tab}
+              className={activeTab === item.tab ? 'active' : ''}
+              onClick={() => onTabChange(item.tab)}
+              onMouseEnter={(e) => handleMouseEnter(item.tab, e)}
+              onMouseLeave={handleMouseLeave}
+            >
+              {item.icon}
+            </li>
+          ))}
+        </ul>
         
-        <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => onTabChange('Profile')}>
-          <FaRegUser size={20} />
-          <span>Profile</span>
-        </li>
-      </ul>
-    </div>
+        {/* Mobile Tooltip */}
+        {hoveredItem && (
+          <div 
+            className="mobile-tooltip"
+            style={{
+              left: `${tooltipPosition.x}px`,
+              bottom: `${tooltipPosition.y}px`
+            }}
+          >
+            {hoveredItem}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

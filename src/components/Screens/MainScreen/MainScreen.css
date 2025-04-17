@@ -5,6 +5,10 @@
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
+  height: auto;
+  overflow-y: auto;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-header {
@@ -54,7 +58,7 @@
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns grid */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -206,11 +210,13 @@
 .leads-table {
   margin-top: 15px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 th, td {
@@ -268,24 +274,70 @@ th {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .main-content {
+  .main-content-mainscreen {
     flex-direction: column;
   }
 }
 
 @media (max-width: 768px) {
+  .dashboard-container {
+    width: 100%;
+    padding: 15px;
+    margin: 0;
+    min-height: 160vh;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .main-content-mainscreen {
+    min-height: calc(100vh - 160px);
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .content-column {
+    width: 100%;
+  }
+
+  .activity-card,
+  .chart-card,
+  .leads-card,
+  .quick-actions {
+    padding: 15px;
+    width: 100%;
   }
 
   .action-buttons {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    padding: 0 10px;
+  }
+
+  table {
+    min-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 
   .dashboard-header {

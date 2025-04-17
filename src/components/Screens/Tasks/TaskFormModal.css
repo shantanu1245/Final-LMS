@@ -1,0 +1,274 @@
+/* Modal Overlay */
+.task-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+    padding: 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  
+  /* Modal Box */
+  .task-modal-container {
+    background: linear-gradient(to bottom right, #ffffff, #f9faff);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 520px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+  
+  /* Modal Header */
+  .task-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .task-modal-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+  }
+  .task-create-btn{
+    padding: 10px 18px;
+    border: none;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease;
+    background: linear-gradient(to right, #2176ff, #478dff);
+    color: white;
+  }
+  
+  .task-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+  }
+  
+  .task-close-btn:hover {
+    color: #ff4d4f;
+  }
+  
+  /* Modal Body */
+  .task-modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+    row-gap: 16px;
+  }
+  
+  .task-modal-body .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .task-modal-body .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    font-size: 13px;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    border: 1px solid #dbe3f0;
+    border-radius: 8px;
+    font-family: inherit;
+    background-color: #fefefe;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #2176ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(33, 118, 255, 0.1);
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    top: 36px;
+    right: 12px;
+    font-size: 15px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 1;
+  }
+  
+  .password-toggle:hover {
+    color: #2176ff;
+  }
+  
+  /* Modal Footer */
+  .task-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 22px;
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+  }
+  
+  .task-modal-footer .create-job-btn,
+  .task-modal-footer .cancel-btn {
+    padding: 10px 18px;
+    border: none;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease;
+  }
+  
+  .task-modal-footer .create-job-btn {
+    background: linear-gradient(to right, #2176ff, #478dff);
+    color: white;
+  }
+  
+  .task-modal-footer .create-job-btn:hover {
+    background: linear-gradient(to right, #1a63d4, #3b80ff);
+  }
+  
+  .task-modal-footer .cancel-btn {
+    background: #f3f4f7;
+    color: #333;
+  }
+  
+  .task-modal-footer .cancel-btn:hover {
+    background: #e0e2e8;
+  }
+  
+  /* Toggle Switch Style */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 22px;
+    margin-top: 6px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 34px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2176ff;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  
+  /* Optional rounded switch */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .task-modal-body {
+      grid-template-columns: 1fr;
+    }
+  
+    .task-modal-footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .task-modal-footer .create-job-btn,
+    .task-modal-footer .cancel-btn {
+      width: 100%;
+    }
+  
+    .task-modal-header h2 {
+      font-size: 18px;
+    }
+  
+    .task-modal-container {
+      padding: 20px;
+      max-height: 90vh;
+    }
+  }
+  

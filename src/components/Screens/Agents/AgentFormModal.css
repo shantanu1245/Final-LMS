@@ -1,0 +1,206 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+    padding: 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  
+  /* Modal Box */
+  .modal-container {
+    background: linear-gradient(to bottom right, #ffffff, #f9faff);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 520px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+  
+  /* Modal Header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .modal-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+  }
+  
+  .close-btn:hover {
+    color: #ff4d4f;
+  }
+  
+  /* Modal Body */
+  .modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+    row-gap: 16px;
+  }
+  
+  .modal-body .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .modal-body .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    font-size: 13px;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    border: 1px solid #dbe3f0;
+    border-radius: 8px;
+    font-family: inherit;
+    background-color: #fefefe;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #2176ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(33, 118, 255, 0.1);
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    top: 36px;
+    right: 12px;
+    font-size: 15px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 1;
+  }
+  
+  .password-toggle:hover {
+    color: #2176ff;
+  }
+  
+  /* Modal Footer */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 22px;
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+  }
+  
+  .modal-footer .create-job-btn,
+  .modal-footer .cancel-btn {
+    padding: 10px 18px;
+    border: none;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease;
+  }
+  
+  .modal-footer .create-job-btn {
+    background: linear-gradient(to right, #2176ff, #478dff);
+    color: white;
+  }
+  
+  .modal-footer .create-job-btn:hover {
+    background: linear-gradient(to right, #1a63d4, #3b80ff);
+  }
+  
+  .modal-footer .cancel-btn {
+    background: #f3f4f7;
+    color: #333;
+  }
+  
+  .modal-footer .cancel-btn:hover {
+    background: #e0e2e8;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .modal-body {
+      grid-template-columns: 1fr;
+    }
+  
+    .modal-footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .modal-footer .create-job-btn,
+    .modal-footer .cancel-btn {
+      width: 100%;
+    }
+  
+    .modal-header h2 {
+      font-size: 18px;
+    }
+  
+    .modal-container {
+      padding: 20px;
+      max-height: 90vh;
+    }
+  }

@@ -7,7 +7,7 @@
 }
 
 /* Menu Toggle Button */
-.menu-toggle {
+/* .menu-toggle {
   display: none;
   position: absolute;
   top: 20px;
@@ -17,12 +17,12 @@
   font-size: 30px;
   color: #333;
   z-index: 100;
-}
+} */
 
 /* Main Content Area */
 .main-content {
   padding: 20px;
-  margin-left: 130px; /* Space for the fixed sidebar */
+  margin-left: 130px; 
   margin-right: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -49,9 +49,9 @@
   }
 
   /* Main content adjustments when sidebar is collapsed */
-  .app-container.sidebar-open .main-content {
-    margin-left: 100px; /* Adjust when sidebar is open */
-  }
+  /* .app-container.sidebar-open .main-content {
+    margin-left: 100px; 
+  } */
 
   .main-content {
     margin-left: 0;
@@ -66,4 +66,48 @@
   .menu-toggle {
     display: block;
   }
+}
+
+
+
+
+
+:root {
+  /* Light theme variables */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #4a6fa5;
+  --secondary-color: #f0f0f0;
+  --border-color: #e0e0e0;
+  --card-bg: #f8f8f8;
+  --hover-color: #e9e9e9;
+}
+
+.dark-mode {
+  /* Dark theme variables */
+  --bg-color: #121212;
+  --text-color: #f0f0f0;
+  --primary-color: #6d9ee6;
+  --secondary-color: #1e1e1e;
+  --border-color: #333333;
+  --card-bg: #1e1e1e;
+  --hover-color: #333333;
+}
+
+/* Apply the variables to your elements */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Example component styling */
+.dashboard {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.content-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
 }

@@ -1,148 +1,318 @@
-/* Base Styling */
-.leads-container {
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    width: 100%; /* Full width of the parent container */
-    box-sizing: border-box; /* Ensures padding doesn't overflow the parent */
-  }
-  
-  /* Header */
-  .leads-header {
-    display: flex;
+/* LeadTable.css */
+.lead-container {
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+.lead-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.lead-filter-header h2 {
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lead-filter-bar {
+  background: #fff;
+  border: 1px solid #e0e8f0;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 18px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.lead-filter-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.lead-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.lead-filter-badge {
+  background-color: #f0f4ff;
+  color: #2176ff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  border: 1px solid #d0dcf1;
+}
+
+.lead-filter-options {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border: 1px solid #cfd9e3;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  z-index: 100;
+  width: 180px;
+}
+
+.lead-filter-option {
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lead-filter-option:hover,
+.lead-filter-option.selected {
+  background-color: #e9f0ff;
+}
+
+.lead-search-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfd9e3;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+.lead-search-wrapper input {
+  padding: 10px 14px;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.lead-search-btn {
+  padding: 10px;
+  background-color: transparent;
+  border: none;
+  color: #2176ff;
+  cursor: pointer;
+}
+
+.lead-create-btn {
+  background-color: #2176ff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.lead-table-section {
+  overflow-x: auto;
+  width: 100%;
+  border: 1px solid #e3e8f0;
+  border-radius: 0 0 10px 10px;
+}
+
+.lead-table-header,
+.lead-table-row {
+  display: grid;
+  min-width: 1100px;
+  grid-template-columns:
+    40px
+    1.5fr
+    1.2fr
+    2fr
+    1.5fr
+    1.5fr
+    1.2fr
+    1.5fr
+    1.5fr
+    1fr
+    220px;
+  align-items: center;
+  padding: 14px 20px;
+  column-gap: 16px;
+}
+
+.lead-table-header {
+  background-color: #f7faff;
+  font-weight: 600;
+  color: #8ca2bd;
+}
+
+.lead-table-row {
+  border-top: 1px solid #edf1f7;
+  background-color: white;
+}
+
+.lead-table-row:hover {
+  background-color: #f9fbff;
+}
+
+.lead-row-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.lead-icon-btn {
+  position: relative;
+  cursor: pointer;
+  padding: 6px;
+  border: 1.5px solid #c2cfe0;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
+}
+
+.lead-icon-btn.always-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lead-icon-btn:not(.always-visible) {
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  padding: 0;
+  border-color: transparent;
+}
+
+.lead-table-row:hover .lead-icon-btn:not(.always-visible) {
+  opacity: 1;
+  visibility: visible;
+  max-width: 100px;
+  padding: 6px;
+  border-color: #c2cfe0;
+}
+
+.lead-icon-btn:hover {
+  border-color: #2176ff;
+  background-color: #e8f1ff;
+}
+
+/* ... [rest of responsive styles same structure with lead- prefix] ... */
+
+/* Mobile Responsive Styles */
+@media (min-width: 480px) {
+  .lead-filter-header {
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
   }
   
-  .leads-header h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #4e73df;
+  .lead-filter-bar {
+    flex-direction: row;
+    align-items: center;
   }
   
-  .create-lead-btn {
-    background-color: #4e73df;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  .lead-filter-box {
+    flex-direction: row;
+    width: auto;
   }
   
-  .create-lead-btn:hover {
-    background-color: #2e59d9;
+  .lead-create-btn {
+    width: auto;
   }
   
-  /* Leads Table Container */
-  .leads-table-container {
-    overflow-x: auto; /* Enable horizontal scrolling for the table */
-    width: 100%;
-    box-sizing: border-box;
+  .lead-search-wrapper {
+    max-width: 25rem;
+  }
+}
+
+@media (min-width: 768px) {
+ 
+  
+  .lead-filter-header h2 {
+    font-size: 1.75rem;
   }
   
-  /* Table Styling */
-  .leads-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 15px;
+  .lead-filter-bar {
+    padding: 1rem 1.5rem;
   }
   
-  .leads-table th, .leads-table td {
-    padding: 15px 20px;
-    text-align: left;
-    border-bottom: 1px solid #e2e2e2;
-    font-size: 14px;
+  .lead-table-header,
+  .lead-table-row {
+    padding: 1rem 1.5rem;
+    column-gap: 1.25rem;
   }
   
-  .leads-table th {
-    background-color: #f8f9fc;
-    color: #4e73df;
-    font-weight: 600;
+  .lead-icon-btn {
+    padding: 0.5rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+ 
+  
+  .lead-filter-header h2 {
+    font-size: 2rem;
   }
   
-  .leads-table td {
-    color: #5a5c69;
+  .lead-table-header,
+  .lead-table-row {
+    grid-template-columns: 
+      3.5rem
+      1.5fr
+      1.2fr
+      2fr
+      1.5fr
+      1.5fr
+      1.2fr
+      1.5fr
+      1.5fr
+      1fr
+      220px;
+    column-gap: 1.5rem;
+    padding: 1rem 2rem;
   }
   
-  /* Action Button */
-  .leads-table td .action-btn {
-    background-color: #1cc88a;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+  .lead-row-actions {
+    gap: 0.75rem;
+  }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 359px) {
+  .lead-container {
+    padding: 1rem;
   }
   
-  .leads-table td .action-btn:hover {
-    background-color: #17a673;
+  .lead-table-header,
+  .lead-table-row {
+    min-width: 62.5rem;
+    padding: 0.75rem 1rem;
+    column-gap: 0.75rem;
   }
   
-  /* Status Coloring */
-  .status.new {
-    background-color: #cce5ff;
-    color: #004085;
-    padding: 5px 10px;
-    border-radius: 4px;
+  .lead-icon-btn {
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Touch Device Adjustments */
+@media (hover: none) {
+  .lead-icon-btn:not(.always-visible) {
+    opacity: 1;
+    visibility: visible;
+    max-width: none;
+    padding: 0.375rem;
+    border-color: #c2cfe0;
   }
   
-  .status.contacted {
-    background-color: #fff3cd;
-    color: #856404;
-    padding: 5px 10px;
-    border-radius: 4px;
+  .lead-table-row .lead-icon-btn {
+    transform: scale(0.9);
   }
-  
-  .status.qualified {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 5px 10px;
-    border-radius: 4px;
-  }
-  
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .create-lead-btn {
-      font-size: 12px;
-      padding: 8px 12px;
-    }
-  
-    .leads-table th, .leads-table td {
-      padding: 10px 12px;
-      font-size: 12px;
-    }
-  
-    .leads-table td .action-btn {
-      font-size: 12px;
-      padding: 6px 12px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .leads-header {
-      flex-direction: column;
-      gap: 10px;
-    }
-  
-    .create-lead-btn {
-      width: 100%;
-    }
-  
-    .leads-table th, .leads-table td {
-      padding: 8px 12px;
-      font-size: 10px;
-    }
-  
-    .leads-table td .action-btn {
-      font-size: 10px;
-      padding: 4px 8px;
-    }
-  }
-  
+}

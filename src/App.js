@@ -19,9 +19,6 @@ const App = () => {
     <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
       <Sidebar onTabChange={handleTabChange} activeTab={activeTab} sidebarOpen={sidebarOpen} />
       <div className="main-content">
-        <button className="menu-toggle" onClick={toggleSidebar}>
-          ☰
-        </button>
         <Dashboard activeTab={activeTab} />
       </div>
     </div>

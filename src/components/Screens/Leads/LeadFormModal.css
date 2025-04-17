@@ -1,0 +1,155 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Modal Box */
+  .modal-container {
+    background: linear-gradient(to bottom right, #ffffff, #f9faff);
+    border-radius: 16px;
+    width: 650px;
+    max-width: 95%;
+    padding: 32px 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Modal Header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .modal-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+  }
+  
+  .close-btn:hover {
+    color: #ff4d4f;
+  }
+  
+  /* Modal Body */
+  .modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 34px;
+    row-gap: 24px;
+  }
+  
+  .modal-body .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  
+  .modal-body .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 95%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #dbe3f0;
+    border-radius: 10px;
+    font-family: inherit;
+    background-color: #fefefe;
+    transition: border-color 0.2s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #2176ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(33, 118, 255, 0.1);
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    top: 38px;
+    right: 14px;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 1;
+  }
+  
+  .password-toggle:hover {
+    color: #2176ff;
+  }
+  
+  /* Modal Footer */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 26px;
+    grid-column: 1 / -1;
+  }
+  
+  .modal-footer .create-job-btn {
+    background: linear-gradient(to right, #2176ff, #478dff);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  .modal-footer .create-job-btn:hover {
+    background: linear-gradient(to right, #1a63d4, #3b80ff);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
