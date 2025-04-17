@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import './Sidebar.css';
-import { 
-  FaHome, 
-  FaBriefcase, 
-  FaUsers, 
-  FaRegUser, 
-  FaTasks, 
-  FaGlobeAmericas,
-  FaMoon,
-  FaSun
-} from 'react-icons/fa';
+import { FaHome, FaBriefcase, FaUsers, FaRegUser, FaTasks, FaGlobeAmericas } from 'react-icons/fa';
+import logo from '../../Assets/logo.png'
 
-const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode }) => {
+const Sidebar = ({ onTabChange, activeTab, sidebarOpen }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
@@ -44,7 +36,8 @@ const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode
       <div className={`sidebar desktop-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <div className="logo">
-            <FaHome size={32} />
+            {/* <img src={logo} alt='Logo' style={{backgroundColor:'black'}} width={50} /> */}
+            <h1 style={{marginTop:'-1.5vh'}}>PTS</h1>
           </div>
           <h2>Dashboard</h2>
         </div>
@@ -60,24 +53,6 @@ const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode
             </li>
           ))}
         </ul>
-        
-        {/* Dark Mode Toggle - Desktop */}
-        <div 
-          className="theme-toggle"
-          onClick={toggleDarkMode}
-        >
-          {darkMode ? (
-            <>
-              <FaSun size={20} />
-              
-            </>
-          ) : (
-            <>
-              <FaMoon size={20} />
-              
-            </>
-          )}
-        </div>
       </div>
 
       {/* Mobile Bottom Navigation */}
@@ -94,15 +69,6 @@ const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode
               {item.icon}
             </li>
           ))}
-          
-          {/* Dark Mode Toggle - Mobile */}
-          <li 
-            onClick={toggleDarkMode}
-            onMouseEnter={(e) => handleMouseEnter(darkMode ? 'Light Mode' : 'Dark Mode', e)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-          </li>
         </ul>
         
         {/* Mobile Tooltip */}

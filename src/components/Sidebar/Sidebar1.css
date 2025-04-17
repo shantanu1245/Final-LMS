@@ -156,46 +156,6 @@
   from { opacity: 0; transform: translateX(-50%) translateY(5px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
-/* Theme Toggle Styles */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  margin: 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--text-color);
-  background-color: var(--secondary-color);
-  transition: all 0.3s ease;
-}
-
-.theme-toggle:hover {
-  background-color: var(--hover-color);
-}
-
-.theme-toggle span {
-  margin-left: 10px;
-  font-size: 0.9rem;
-}
-
-/* Mobile Bottom Nav Dark Mode Toggle */
-.mobile-bottom-nav .active {
-  color: var(--primary-color);
-}
-
-/* Dark mode specific adjustments */
-.dark-mode .theme-toggle {
-  background-color: var(--secondary-color);
-}
-
-.dark-mode .theme-toggle:hover {
-  background-color: var(--hover-color);
-}
-
-.dark-mode .mobile-tooltip {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {

@@ -13,79 +13,74 @@ const Loader = () => (
   <div className="loader" style={{ 
     padding: '20px', 
     textAlign: 'center',
-    color: 'var(--text-color)',
-    backgroundColor: 'var(--card-bg)',
-    borderRadius: '8px',
-    margin: '20px',
-    boxShadow: '0 2px 4px var(--shadow-color)'
+    color: 'var(--text-color)'
   }}>
-    <div className="loading-spinner"></div>
-    <p>Loading content...</p>
+    Loading...
   </div>
 );
 
-const Dashboard = ({ activeTab, darkMode }) => {
+const Dashboard = ({ activeTab }) => {
+  
   const renderContent = () => {
     switch (activeTab) {
       case 'Dashboard':
         return (
           <Suspense fallback={<Loader />}>
-            <MainScreen darkMode={darkMode} />
+            <MainScreen />
           </Suspense>
         );
       case 'Leads':
         return (
           <Suspense fallback={<Loader />}>
-            <Leads darkMode={darkMode} />
+            <Leads />
           </Suspense>
         );
       case 'Agents':
         return (
           <Suspense fallback={<Loader />}>
-            <Agent darkMode={darkMode} />
+            <Agent />
           </Suspense>
         );
       case 'Tasks':
         return (
           <Suspense fallback={<Loader />}>
-            <Tasks darkMode={darkMode} />
+            <Tasks />
           </Suspense>
         );
       case 'Meetings':
         return (
           <Suspense fallback={<Loader />}>
-            <Meetings darkMode={darkMode} />
+            <Meetings />
           </Suspense>
         );
       case 'Profile':
         return (
           <Suspense fallback={<Loader />}>
-            <Profile darkMode={darkMode} />
+            <Profile />
           </Suspense>
         );
       default:
         return (
           <div className="content-box" style={{
             backgroundColor: 'var(--card-bg)',
-          
-            borderRadius: '8px',
-            margin: '20px',
-            boxShadow: '0 2px 4px var(--shadow-color)'
+            padding: '20px',
+            borderRadius: '8px'
           }}>
-            <h4 style={{ color: 'var(--text-color)' }}>Dashboard Overview</h4>
-            <p style={{ color: 'var(--text-secondary)' }}>Welcome to your Dashboard! Here's an overview of your activity.</p>
+            <h4>Dashboard Overview</h4>
+            <p>Welcome to your Dashboard! Here's an overview of your activity.</p>
           </div>
         );
     }
   };
 
   return (
-    <div className={`dashboard ${darkMode ? 'dark-mode' : ''}`} style={{
+    <div className={`dashboard`} style={{
       backgroundColor: 'var(--bg-color)',
       color: 'var(--text-color)',
       minHeight: '100vh',
       transition: 'background-color 0.3s ease, color 0.3s ease'
     }}>
+    
       {renderContent()}
     </div>
   );

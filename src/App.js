@@ -5,21 +5,33 @@ import './App.css';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('Dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state (open/closed)
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
   };
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen); // Toggle sidebar visibility
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.body.classList.toggle('dark-mode', !darkMode);
   };
 
   return (
-    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-      <Sidebar onTabChange={handleTabChange} activeTab={activeTab} sidebarOpen={sidebarOpen} />
+    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'} ${darkMode ? 'dark-mode' : ''}`}>
+      <Sidebar 
+        onTabChange={handleTabChange} 
+        activeTab={activeTab} 
+        sidebarOpen={sidebarOpen}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
+      />
       <div className="main-content">
-        <Dashboard activeTab={activeTab} />
+        <Dashboard activeTab={activeTab} darkMode={darkMode} />
       </div>
     </div>
   );
