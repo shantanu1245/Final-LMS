@@ -44,6 +44,13 @@ const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode
       <div className={`sidebar desktop-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <div className="logo">
+          <li 
+            onClick={toggleDarkMode}
+            onMouseEnter={(e) => handleMouseEnter(darkMode ? 'Light Mode' : 'Dark Mode', e)}
+            onMouseLeave={handleMouseLeave}
+          >
+            {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+          </li>
             <FaHome size={32} />
           </div>
           <h2>Dashboard</h2>
@@ -96,13 +103,7 @@ const Sidebar = ({ onTabChange, activeTab, sidebarOpen, darkMode, toggleDarkMode
           ))}
           
           {/* Dark Mode Toggle - Mobile */}
-          <li 
-            onClick={toggleDarkMode}
-            onMouseEnter={(e) => handleMouseEnter(darkMode ? 'Light Mode' : 'Dark Mode', e)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-          </li>
+         
         </ul>
         
         {/* Mobile Tooltip */}

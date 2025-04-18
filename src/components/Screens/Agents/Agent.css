@@ -252,6 +252,440 @@
   opacity: 1;
 }
 
+/* Mobile Styles - Enhanced WhatsApp-like UI */
+@media (max-width: 768px) {
+  .jobs-container {
+    display: none; /* Hide desktop container on mobile */
+  }
+  
+  .mobile-agent-container {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .mobile-agent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #3498db;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-left h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .agent-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+  
+  .options-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .options-dropdown {
+    position: relative;
+  }
+  
+  .options-menu {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 160px;
+    z-index: 101;
+    overflow: hidden;
+  }
+  
+  .option-item {
+    padding: 12px 15px;
+    color: #333;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  
+  .option-item:last-child {
+    border-bottom: none;
+  }
+  
+  .option-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .mobile-search-bar {
+    padding: 10px 15px;
+    background-color: #3498db;
+  }
+  
+  .mobile-search-bar input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .mobile-agent-list {
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding-bottom: 80px;
+  }
+  
+  .mobile-agent-item {
+    background-color: white;
+    margin: 8px 15px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+  
+  .agent-content {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    position: relative;
+    z-index: 1;
+    background-color: white;
+  }
+  
+  .agent-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  
+  .agent-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  
+  .agent-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .agent-info p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .agent-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 10px;
+  }
+  
+  .agent-status {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  
+  .agent-status.active {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .agent-status.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .assigned-leads {
+    font-size: 11px;
+    color: #3498db;
+    margin-top: 3px;
+  }
+  
+  .agent-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    z-index: 0;
+  }
+  
+  .action {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .action.edit {
+    background-color: #3498db;
+  }
+  
+  .action.delete {
+    background-color: #e74c3c;
+  }
+  
+  .mobile-floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 99;
+  }
+  
+  /* Agent Detail View */
+  .mobile-agent-detail {
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+  }
+  
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #3498db;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .edit-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .agent-profile {
+    text-align: center;
+    padding: 20px 15px;
+    background-color: white;
+    margin-bottom: 10px;
+  }
+  
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+  }
+  
+  .agent-profile h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .designation {
+    margin: 5px 0;
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+  
+  .agent-stats {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #3498db;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #777;
+    margin-top: 3px;
+  }
+  
+  .agent-details {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+  
+  .label {
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .value {
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+  }
+  
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  .assign-button, .delete-button {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .assign-button {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .delete-button {
+    background-color: #f8f9fa;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+  }
+  
+  /* Swipe animations */
+  .mobile-agent-item.swipe-right {
+    transform: translateX(60px);
+  }
+  
+  .mobile-agent-item.swipe-left {
+    transform: translateX(-60px);
+  }
+}
+
+/* Desktop Responsive Adjustments */
+@media (min-width: 769px) {
+  .mobile-agent-container {
+    display: none; /* Hide mobile container on desktop */
+  }
+  
+  .jobs-container {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-header {
     flex-direction: column;
@@ -314,276 +748,5 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .mobile-agent-container {
-    padding: 15px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  }
-  
-  .mobile-agent-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .mobile-agent-header h2 {
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .mobile-add-btn {
-    background: #007AFF;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .mobile-search-bar {
-    margin-bottom: 15px;
-  }
-  
-  .mobile-search-bar input {
-    width: 100%;
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
-    font-size: 16px;
-  }
-  
-  .mobile-agent-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .mobile-agent-item {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-  
-  .mobile-agent-item.swipe-left {
-    transform: translateX(-100px);
-  }
-  
-  .mobile-agent-item.swipe-right {
-    transform: translateX(100px);
-  }
-  
-  .agent-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .agent-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #007AFF;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .agent-info {
-    flex: 1;
-  }
-  
-  .agent-info h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-  
-  .agent-info p {
-    margin: 5px 0 0;
-    color: #666;
-    font-size: 14px;
-  }
-  
-  .agent-status {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  
-  .agent-status.active {
-    background: #D5F5E3;
-    color: #28A745;
-  }
-  
-  .agent-status.inactive {
-    background: #FADBD8;
-    color: #E74C3C;
-  }
-  
-  .agent-actions {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    display: flex;
-    transition: transform 0.3s ease;
-  }
-  
-  .action {
-    width: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-  }
-  
-  .action.edit {
-    background: #3498DB;
-  }
-  
-  .action.delete {
-    background: #E74C3C;
-  }
-  
-  /* Agent Detail View */
-  .mobile-agent-detail {
-    background: white;
-    height: 100vh;
-    padding: 15px;
-  }
-  
-  .detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .back-button, .edit-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #007AFF;
-    cursor: pointer;
-  }
-  
-  .agent-profile {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .profile-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: #007AFF;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    font-weight: bold;
-    margin: 0 auto 15px;
-  }
-  
-  .agent-profile h2 {
-    margin: 0;
-    font-size: 22px;
-  }
-  
-  .designation {
-    color: #666;
-    margin: 5px 0;
-  }
-  
-  .status {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
-  .status.active {
-    background: #D5F5E3;
-    color: #28A745;
-  }
-  
-  .status.inactive {
-    background: #FADBD8;
-    color: #E74C3C;
-  }
-  
-  .agent-details {
-    background: #F8F8F8;
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .detail-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .detail-item:last-child {
-    border-bottom: none;
-  }
-  
-  .label {
-    color: #666;
-    font-weight: 500;
-  }
-  
-  .value {
-    font-weight: 500;
-  }
-  
-  .action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .assign-button, .delete-button {
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  
-  .assign-button {
-    background: #007AFF;
-    color: white;
-  }
-  
-  .delete-button {
-    background: #F8F8F8;
-    color: #E74C3C;
   }
 }
