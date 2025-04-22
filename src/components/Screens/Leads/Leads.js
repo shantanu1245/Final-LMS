@@ -15,10 +15,18 @@ import {
   FaTrash,
   FaEdit,
   FaSave,
-  FaBan
+  FaBan,
+  FaChartLine,
+  FaChartPie,
+  FaChartBar
 } from "react-icons/fa";
+import * as XLSX from "xlsx";
+import { database } from "../../../firebaseConfig"; // Import your Firebase configuration
+import { ref, push, set, onValue,get,update } from "firebase/database";
 import LeadFormModal from "./LeadFormModal";
 import "./Leads.css";
+import Swal from "sweetalert2";
+
 
 const Leads = () => {
   const [selectAll, setSelectAll] = useState(false);
@@ -33,6 +41,18 @@ const Leads = () => {
   const [editFormData, setEditFormData] = useState({});
   const [noteInput, setNoteInput] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
+  const [importPreview, setImportPreview] = useState(null);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [stats, setStats] = useState({
+    total: 0,
+    new: 0,
+    contacted: 0,
+    qualified: 0,
+    lost: 0,
+    recent: []
+  });
+  const storedUserKey = localStorage.getItem('userKey');
+
 
   const [formData, setFormData] = useState({
     clientName: "",
@@ -42,7 +62,7 @@ const Leads = () => {
     remark: "",
     industry: "",
     leadSource: "",
-    leadStatus: "",
+    leadStatus: "New",
     numberOfEmployees: "",
     status: "Active",
   });
@@ -70,6 +90,240 @@ const Leads = () => {
   // Refs for mobile list items
   const leadItemRefs = useRef([]);
   const noteInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+  // Fetch leads from Firebase on component mount
+  useEffect(() => {
+    const leadsRef = ref(database, `admins/${storedUserKey}/leads`);
+    onValue(leadsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const leadsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+          checked: false
+        }));
+        setRows(leadsArray);
+        calculateStats(leadsArray);
+      } else {
+        setRows([]);
+        calculateStats([]);
+      }
+    });
+  }, []);
+
+  // Calculate lead statistics
+  const calculateStats = (leads) => {
+    const now = new Date();
+    const recentLeads = leads
+      .filter(lead => {
+        const leadDate = new Date(lead.createdAt || now);
+        return (now - leadDate) <= (7 * 24 * 60 * 60 * 1000); // Last 7 days
+      })
+      .slice(0, 5); // Get up to 5 most recent
+    
+    setStats({
+      total: leads.length,
+      new: leads.filter(lead => lead.leadStatus === "New").length,
+      contacted: leads.filter(lead => lead.leadStatus === "Contacted").length,
+      qualified: leads.filter(lead => lead.leadStatus === "Qualified").length,
+      lost: leads.filter(lead => lead.leadStatus === "Lost").length,
+      recent: recentLeads
+    });
+  };
+
+  const handleFileImport = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    // Get the stored user key
+    const storedUserKey = localStorage.getItem("userKey");
+    if (!storedUserKey) {
+      Swal.fire('Error', 'User not authenticated', 'error');
+      return;
+    }
+  
+    // Reference to custom forms in Firebase
+    const customFormsRef = ref(database, `admins/${storedUserKey}/customForms`);
+  
+    try {
+      // First fetch the custom form fields from Firebase
+      const snapshot = await get(customFormsRef);
+      if (!snapshot.exists()) {
+        Swal.fire('Error', 'No custom form fields found', 'error');
+        return;
+      }
+  
+      const formsData = snapshot.val();
+      let customFields = [];
+  
+      // Extract all custom field labels
+      for (let formKey in formsData) {
+        if (formsData.hasOwnProperty(formKey)) {
+          const fieldsData = formsData[formKey].fields;
+          for (let index in fieldsData) {
+            customFields.push(fieldsData[index].label);
+          }
+        }
+      }
+  
+      // Now read the Excel file
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+          
+          // Get Excel column names
+          const excelColumns = Object.keys(jsonData[0] || {});
+          
+          // Check if all custom fields exist in Excel columns
+          const missingFields = customFields.filter(
+            field => !excelColumns.some(
+              col => col.toLowerCase() === field.toLowerCase()
+            )
+          );
+  
+          if (missingFields.length > 0) {
+            Swal.fire({
+              title: 'Fields Mismatch',
+              html: `The following required fields are missing in your Excel file:<br><br>
+                    <strong>${missingFields.join(', ')}</strong><br><br>
+                    Please update your file and try again.`,
+              icon: 'error'
+            });
+            return;
+          }
+  
+          // Create a mapping between Excel columns and custom field labels
+          const fieldMapping = {};
+          excelColumns.forEach(col => {
+            const matchedField = customFields.find(
+              field => field.toLowerCase() === col.toLowerCase()
+            );
+            if (matchedField) {
+              fieldMapping[col] = matchedField;
+            }
+          });
+  
+          // Map imported data to our lead structure using the field mapping
+          const previewData = jsonData.map((item, index) => {
+            const leadData = {
+              id: `preview-${index}`,
+              status: 'Active',
+              checked: false,
+              isPreview: true,
+              createdAt: new Date().toISOString()
+            };
+  
+            // Add all custom fields from the Excel file
+            for (let col in item) {
+              if (fieldMapping[col]) {
+                leadData[fieldMapping[col]] = item[col];
+              }
+            }
+  
+            return leadData;
+          });
+  
+          setImportPreview(previewData);
+          setShowImportModal(true);
+        } catch (error) {
+          console.error('Error processing file:', error);
+          Swal.fire('Error', 'Failed to process the file', 'error');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } catch (error) {
+      console.error('Error fetching custom fields:', error);
+      Swal.fire('Error', 'Failed to fetch custom form fields', 'error');
+    }
+  };
+
+  // Confirm import to Firebase
+const confirmImport = async () => {
+  if (!importPreview || importPreview.length === 0) return;
+
+  try {
+    // Get the current user's lead limit
+    const userRef = ref(database, `admins/${storedUserKey}`);
+    const userSnapshot = await get(userRef);
+
+    if (!userSnapshot.exists()) {
+      alert("User not found.");
+      return;
+    }
+
+    const userData = userSnapshot.val();
+    const leadLimit = userData.leadsLimit || 0; // Default to 0 if no lead limit is set
+
+    // Get the current number of leads in the Firebase database
+    const leadsRef = ref(database, `admins/${storedUserKey}/leads`);
+    const leadsSnapshot = await get(leadsRef);
+    const currentLeadsCount = leadsSnapshot.exists() ? Object.keys(leadsSnapshot.val()).length : 0;
+
+    // Check if the current number of leads + the new ones exceed the limit
+    if (currentLeadsCount + importPreview.length > leadLimit) {
+      // Close the preview modal first before showing the alert
+      setShowImportModal(false);  // Close the modal
+
+      // Show SweetAlert warning
+      Swal.fire({
+        title: "Lead Limit Exceeded",
+        text: `You cannot import more than ${leadLimit} leads. You have reached your lead limit.`,
+        icon: "warning",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#3085d6"
+      });
+      return;
+    }
+
+    // Proceed with importing the leads if the limit is not exceeded
+    const timestamp = new Date().toISOString();
+
+    // Create an object to batch the writes
+    const updates = {};
+
+    // Loop through the preview data and add it to the updates object
+    importPreview.forEach((lead, index) => {
+      const newLeadRef = ref(database, `admins/${storedUserKey}/leads/${lead.id || `lead-${index}`}`);
+      updates[`admins/${storedUserKey}/leads/${lead.id || `lead-${index}`}`] = {
+        ...lead,
+        createdAt: timestamp,
+        lastContact: "Just now"
+      };
+    });
+
+    // Update all leads at once
+    await update(ref(database), updates);
+
+    Swal.fire({
+      title: `${importPreview.length} leads imported successfully!`,
+      icon: "success",
+      confirmButtonText: "Done",
+      confirmButtonColor: "#3085d6"
+    });
+
+    // Clear the import preview and hide the modal
+    setShowImportModal(false);
+    setImportPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+
+  } catch (error) {
+    console.error("Error importing leads:", error);
+    Swal.fire({
+      title: "Import Failed",
+      text: "Failed to import leads. Please try again.",
+      icon: "error",
+      confirmButtonText: "Okay",
+      confirmButtonColor: "#dc3545"
+    });
+  }
+};
+
+  
+  
 
   // Handle touch start for swipe
   const handleTouchStart = (e, id) => {
@@ -126,7 +380,10 @@ const Leads = () => {
   // Delete lead confirmation
   const confirmDeleteLead = (id) => {
     if (window.confirm("Are you sure you want to delete this lead?")) {
-      setRows(rows.filter(row => row.id !== id));
+      // Remove from Firebase
+      const leadRef = ref(database, `leads/${id}`);
+      set(leadRef, null);
+      
       if (selectedLead && selectedLead.id === id) {
         setMobileView("list");
         setSelectedLead(null);
@@ -136,9 +393,13 @@ const Leads = () => {
 
   // Update lead status
   const updateLeadStatus = (id, newStatus) => {
-    setRows(rows.map(row => 
-      row.id === id ? { ...row, leadStatus: newStatus } : row
-    ));
+    const leadRef = ref(database, `leads/${id}`);
+    set(leadRef, {
+      ...rows.find(row => row.id === id),
+      leadStatus: newStatus,
+      lastContact: new Date().toLocaleString()
+    });
+    
     setShowStatusOptions(null);
     
     // Update selected lead if it's the one being viewed
@@ -149,9 +410,13 @@ const Leads = () => {
 
   // Add predefined note
   const addPredefinedNote = (id, note) => {
-    setRows(rows.map(row => 
-      row.id === id ? { ...row, remark: note } : row
-    ));
+    const leadRef = ref(database, `leads/${id}`);
+    set(leadRef, {
+      ...rows.find(row => row.id === id),
+      remark: note,
+      lastContact: new Date().toLocaleString()
+    });
+    
     setShowNoteOptions(null);
     
     // Update selected lead if it's the one being viewed
@@ -193,38 +458,7 @@ const Leads = () => {
     }
   }, [showNoteInput]);
 
-  const [rows, setRows] = useState([
-    {
-      id: 1,
-      clientName: "John Doe",
-      title: "CEO",
-      email: "john@example.com",
-      phone: "9876543210",
-      remark: "Interested in partnership",
-      industry: "Technology",
-      leadSource: "Website",
-      leadStatus: "New",
-      numberOfEmployees: "50",
-      status: "Active",
-      checked: false,
-      lastContact: "2 hours ago",
-    },
-    {
-      id: 2,
-      clientName: "Jane Smith",
-      title: "Marketing Director",
-      email: "jane@example.com",
-      phone: "9876543211",
-      remark: "Requested demo",
-      industry: "Finance",
-      leadSource: "Referral",
-      leadStatus: "Contacted",
-      numberOfEmployees: "200",
-      status: "Active",
-      checked: false,
-      lastContact: "1 day ago",
-    },
-  ]);
+  const [rows, setRows] = useState([]);
 
   const handleSelectAll = () => {
     const updated = rows.map((row) => ({ ...row, checked: !selectAll }));
@@ -255,11 +489,29 @@ const Leads = () => {
   };
 
   const handleImportLeads = () => {
-    alert("Import leads functionality would go here");
+    fileInputRef.current.click();
   };
 
   const handleExportLeads = () => {
-    alert("Export leads functionality would go here");
+    // Convert leads to worksheet
+    const ws = XLSX.utils.json_to_sheet(rows.map(lead => ({
+      "Client Name": lead.clientName,
+      "Title": lead.title,
+      "Email": lead.email,
+      "Phone": lead.phone,
+      "Remark": lead.remark,
+      "Industry": lead.industry,
+      "Lead Source": lead.leadSource,
+      "Lead Status": lead.leadStatus,
+      "Employees": lead.numberOfEmployees,
+      "Status": lead.status,
+      "Last Contact": lead.lastContact
+    })));
+    
+    // Create workbook and download
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Leads");
+    XLSX.writeFile(wb, "leads_export.xlsx");
   };
 
   const handleEditClick = () => {
@@ -273,11 +525,11 @@ const Leads = () => {
   };
 
   const handleSaveEdit = () => {
-    const updatedRows = rows.map(row => 
-      row.id === selectedLead.id ? { ...editFormData } : row
-    );
-    setRows(updatedRows);
-    setSelectedLead({ ...editFormData });
+    const leadRef = ref(database, `leads/${selectedLead.id}`);
+    set(leadRef, {
+      ...editFormData,
+      lastContact: new Date().toLocaleString()
+    });
     setIsEditing(false);
   };
 
@@ -297,11 +549,12 @@ const Leads = () => {
 
   const handleSaveNote = () => {
     const updatedNote = noteInput.trim();
-    const updatedRows = rows.map(row => 
-      row.id === selectedLead.id ? { ...row, remark: updatedNote } : row
-    );
-    setRows(updatedRows);
-    setSelectedLead(prev => ({ ...prev, remark: updatedNote }));
+    const leadRef = ref(database, `leads/${selectedLead.id}`);
+    set(leadRef, {
+      ...selectedLead,
+      remark: updatedNote,
+      lastContact: new Date().toLocaleString()
+    });
     setShowNoteInput(false);
   };
 
@@ -311,17 +564,22 @@ const Leads = () => {
   };
 
   const handlePredefinedNoteClick = (note) => {
-    const updatedRows = rows.map(row => 
-      row.id === selectedLead.id ? { ...row, remark: note } : row
-    );
-    setRows(updatedRows);
-    setSelectedLead(prev => ({ ...prev, remark: note }));
+    const leadRef = ref(database, `leads/${selectedLead.id}`);
+    set(leadRef, {
+      ...selectedLead,
+      remark: note,
+      lastContact: new Date().toLocaleString()
+    });
     setShowNoteInput(false);
   };
 
   const renderStatusBadge = (status) => {
+    if (!status || typeof status !== 'string') {
+      status = 'New'; // Default value if status is not defined or not a string
+    }
+  
     let icon, color;
-    switch(status.toLowerCase()) {
+    switch (status.toLowerCase()) {
       case 'new':
         icon = <FaClock />;
         color = '#ff9800';
@@ -333,6 +591,10 @@ const Leads = () => {
       case 'qualified':
         icon = <FaCheck />;
         color = '#4caf50';
+        break;
+      case 'lost':
+        icon = <FaTimes />;
+        color = '#f44336';
         break;
       default:
         icon = <FaClock />;
@@ -347,6 +609,7 @@ const Leads = () => {
       </span>
     );
   };
+  
 
   const renderEditableField = (fieldName, label, value, type = "text") => {
     return (
@@ -387,9 +650,31 @@ const Leads = () => {
     );
   };
 
+  const renderStatsCard = (title, value, icon, color) => {
+    return (
+      <div className="stat-card" style={{ borderTop: `4px solid ${color}` }}>
+        <div className="stat-icon" style={{ color }}>
+          {icon}
+        </div>
+        <div className="stat-content">
+          <h3>{value}</h3>
+          <p>{title}</p>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="lead-container">
+      {/* Hidden file input for import */}
+      <input 
+        type="file" 
+        ref={fileInputRef}
+        onChange={handleFileImport}
+        accept=".xlsx,.xls,.csv"
+        style={{ display: 'none' }}
+      />
+      
       {/* Desktop View */}
       <div className="desktop-view">
         <div className="lead-filter-header">
@@ -418,6 +703,15 @@ const Leads = () => {
             </button>
           </div>
         </div>
+
+        {/* Stats Section */}
+        {/* <div className="stats-section">
+          {renderStatsCard("Total Leads", stats.total, <FaChartLine />, "#4e73df")}
+          {renderStatsCard("New", stats.new, <FaClock />, "#ff9800")}
+          {renderStatsCard("Contacted", stats.contacted, <FaPhoneAlt />, "#2196f3")}
+          {renderStatsCard("Qualified", stats.qualified, <FaCheck />, "#4caf50")}
+          {renderStatsCard("Lost", stats.lost, <FaTimes />, "#f44336")}
+        </div> */}
 
         <div className="lead-filter-bar">
           <div className="lead-filter-box">
@@ -510,9 +804,7 @@ const Leads = () => {
               <div>{row.industry}</div>
               <div>{row.leadSource}</div>
               <div>
-                <span className={`lead-status-badge ${row.leadStatus.toLowerCase()}`}>
-                  {row.leadStatus}
-                </span>
+                {renderStatusBadge(row.leadStatus)}
               </div>
               <div>{row.numberOfEmployees}</div>
               <div className="lead-row-actions">
@@ -526,10 +818,18 @@ const Leads = () => {
                   <FaStickyNote />
                 </button>
                 <div className="lead-action-group">
-                  <button className="lead-icon-btn" data-tooltip="Edit">
+                  <button 
+                    className="lead-icon-btn" 
+                    data-tooltip="Edit"
+                    onClick={() => handleLeadClick(row)}
+                  >
                     ✏️
                   </button>
-                  <button className="lead-icon-btn" data-tooltip="Delete">
+                  <button 
+                    className="lead-icon-btn" 
+                    data-tooltip="Delete"
+                    onClick={() => confirmDeleteLead(row.id)}
+                  >
                     🗑️
                   </button>
                 </div>
@@ -539,8 +839,8 @@ const Leads = () => {
         </div>
       </div>
 
-     {/* Mobile View */}
-     <div className="mobile-view">
+      {/* Mobile View */}
+      <div className="mobile-view">
         {mobileView === "list" ? (
           <>
             <div className="mobile-lead-header">
@@ -565,6 +865,26 @@ const Leads = () => {
                     </button>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Mobile Stats */}
+            <div className="mobile-stats">
+              <div className="mobile-stat">
+                <FaChartPie />
+                <span>Total: {stats.total}</span>
+              </div>
+              <div className="mobile-stat">
+                <FaClock />
+                <span>New: {stats.new}</span>
+              </div>
+              <div className="mobile-stat">
+                <FaPhoneAlt />
+                <span>Contacted: {stats.contacted}</span>
+              </div>
+              <div className="mobile-stat">
+                <FaCheck />
+                <span>Qualified: {stats.qualified}</span>
               </div>
             </div>
 
@@ -843,12 +1163,85 @@ const Leads = () => {
             });
           }}
           onClose={() => setShowModal(false)}
-          onCreate={() => {
-            // Add your create logic here
+          onCreate={(newLead) => {
+            const newLeadRef = push(ref(database, 'leads'));
+            set(newLeadRef, {
+              ...newLead,
+              createdAt: new Date().toISOString(),
+              lastContact: "Just now"
+            });
             setShowModal(false);
           }}
         />
       )}
+
+      {/* Import Preview Modal */}
+      {showImportModal && (
+  <div className="modal-overlay">
+    <div className="import-preview-modal">
+      <div className="modal-header">
+        <h3>Import Preview ({importPreview.length} leads)</h3>
+        <button 
+          onClick={() => {
+            setShowImportModal(false);
+            setImportPreview(null);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+          }}
+          className="close-btn"
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <div className="modal-body">
+        <div className="preview-table-container">
+        <div className="modal-footer">
+        <button 
+          className="cancel-btn"
+          onClick={() => {
+            setShowImportModal(false);
+            setImportPreview(null);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+          }}
+        >
+          Cancel
+        </button>
+        <button 
+          className="confirm-btn"
+          onClick={confirmImport}
+        >
+          Confirm Import
+        </button>
+      </div>
+          <table className="preview-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {importPreview.map((lead, index) => (
+                <tr key={index}>
+                  <td>{lead.clientName}</td>
+                  <td>{lead.email}</td>
+                  <td>{lead.phone}</td>
+                  <td>{lead.leadStatus}</td>
+                  <td>{lead.leadSource}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

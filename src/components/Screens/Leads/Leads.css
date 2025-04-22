@@ -861,3 +861,150 @@
 .mobile-lead-item.swiping .lead-content-wrapper {
   transition: none;
 }
+
+/*  */
+/* Modal Background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Container */
+.import-preview-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 10px;
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  color: #333;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Modal Body */
+.modal-body {
+  margin-top: 20px;
+}
+
+/* Table Container */
+.preview-table-container {
+  overflow-x: auto;
+}
+
+/* Table Styling */
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-family: 'Arial', sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.preview-table th, .preview-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.preview-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.preview-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.preview-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #c6c6c6;
+}
+
+.confirm-btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.confirm-btn:hover {
+  background-color: #45a049;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .import-preview-modal {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .modal-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .preview-table th, .preview-table td {
+    padding: 8px 10px;
+  }
+
+  .cancel-btn,
+  .confirm-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+}

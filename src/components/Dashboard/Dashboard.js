@@ -24,7 +24,7 @@ const Loader = () => (
   </div>
 );
 
-const Dashboard = ({ activeTab, darkMode }) => {
+const Dashboard = ({ activeTab, darkMode, onLogout }) => {
   const renderContent = () => {
     switch (activeTab) {
       case 'Dashboard':
@@ -67,7 +67,6 @@ const Dashboard = ({ activeTab, darkMode }) => {
         return (
           <div className="content-box" style={{
             backgroundColor: 'var(--card-bg)',
-          
             borderRadius: '8px',
             margin: '20px',
             boxShadow: '0 2px 4px var(--shadow-color)'
@@ -79,13 +78,48 @@ const Dashboard = ({ activeTab, darkMode }) => {
     }
   };
 
+  const handleLogout = () => {
+    // Clear any user data from localStorage if needed
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userData');
+    
+    // Call the parent's logout function
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
   return (
     <div className={`dashboard ${darkMode ? 'dark-mode' : ''}`} style={{
       backgroundColor: 'var(--bg-color)',
       color: 'var(--text-color)',
       minHeight: '100vh',
-      transition: 'background-color 0.3s ease, color 0.3s ease'
+      transition: 'background-color 0.3s ease, color 0.3s ease',
+      position: 'relative' // Added for logout button positioning
     }}>
+      {/* Logout Button */}
+      <button 
+        onClick={handleLogout}
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          padding: '8px 16px',
+          backgroundColor: darkMode ? '#ff4444' : '#dc3545',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          transition: 'background-color 0.3s ease',
+          zIndex: 1000
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = darkMode ? '#ff6666' : '#e74c3c'}
+        onMouseOut={(e) => e.target.style.backgroundColor = darkMode ? '#ff4444' : '#dc3545'}
+      >
+        Logout
+      </button>
+      
       {renderContent()}
     </div>
   );

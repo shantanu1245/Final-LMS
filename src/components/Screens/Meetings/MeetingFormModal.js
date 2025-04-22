@@ -1,7 +1,21 @@
 import React from "react";
 import "./MeetingFormModal.css";
 
-const MeetingFormModal = ({ formData, onChange, onClose, onCreate }) => {
+const MeetingFormModal = ({ 
+  formData, 
+  onChange, 
+  onClose, 
+  onCreate,
+  onParticipantChange,
+  onAddParticipant,
+  onRemoveParticipant,
+  newParticipantEmail
+}) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCreate();
+  };
+
   return (
     <div className="meeting-modal-overlay">
       <div className="meeting-modal-container">
@@ -9,42 +23,131 @@ const MeetingFormModal = ({ formData, onChange, onClose, onCreate }) => {
           <h2>Create New Meeting</h2>
           <button onClick={onClose} className="meeting-close-btn">&times;</button>
         </div>
-        <div className="meeting-modal-body">
+        <form onSubmit={handleSubmit} className="meeting-modal-body">
           <div className="form-group">
-            <label>Title</label>
-            <input type="text" name="title" placeholder="Meeting title" value={formData.title} onChange={onChange} />
+            <label>Title*</label>
+            <input 
+              type="text" 
+              name="title" 
+              placeholder="Meeting title" 
+              value={formData.title} 
+              onChange={onChange}
+              required
+            />
           </div>
-          <div className="form-group">
-            <label>From Date</label>
-            <input type="date" name="fromDate" value={formData.fromDate} onChange={onChange} />
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label>Start Date*</label>
+              <input 
+                type="datetime-local" 
+                name="fromDate" 
+                value={formData.fromDate} 
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>End Date*</label>
+              <input 
+                type="datetime-local" 
+                name="toDate" 
+                value={formData.toDate} 
+                onChange={onChange}
+                required
+                min={formData.fromDate}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>To Date</label>
-            <input type="date" name="toDate" value={formData.toDate} onChange={onChange} />
-          </div>
+          
           <div className="form-group">
             <label>Related To</label>
-            <input type="text" name="relatedTo" placeholder="e.g. Client A" value={formData.relatedTo} onChange={onChange} />
+            <input
+              type="text"
+              name="relatedTo"
+              placeholder="Client or project name"
+              value={formData.relatedTo}
+              onChange={onChange}
+            />
           </div>
+          
           <div className="form-group">
             <label>Participants</label>
-            <input type="number" name="participants" placeholder="Number of participants" value={formData.participants} onChange={onChange} />
+            <div className="participants-input">
+              <input
+                type="email"
+                placeholder="Add participant email"
+                value={newParticipantEmail}
+                onChange={onParticipantChange}
+              />
+              <button 
+                type="button" 
+                className="add-participant-btn"
+                onClick={onAddParticipant}
+                disabled={!newParticipantEmail}
+              >
+                Add
+              </button>
+            </div>
+            {formData.participants.length > 0 && (
+              <div className="participants-list">
+                {formData.participants.map(email => (
+                  <div key={email} className="participant-tag">
+                    {email}
+                    <button 
+                      type="button"
+                      className="remove-participant"
+                      onClick={() => onRemoveParticipant(email)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+          
           <div className="form-group">
-            <label>Host</label>
-            <input type="text" name="host" placeholder="Hosted by" value={formData.host} onChange={onChange} />
+            <label>Host*</label>
+            <input
+              type="text"
+              name="host"
+              value={formData.host}
+              onChange={onChange}
+              required
+            />
           </div>
+          
           <div className="form-group">
-            <label>Status</label>
-            <select name="status" value={formData.status} onChange={onChange}>
-              <option value="Contacted">Contacted</option>
+            <label>Status*</label>
+            <select 
+              name="status" 
+              value={formData.status} 
+              onChange={onChange}
+              required
+            >
               <option value="Scheduled">Scheduled</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-        </div>
-        <div className="meeting-modal-footer">
-          <button className="meeting-create-btn" onClick={onCreate}>✨ Create</button>
-        </div>
+          
+          <div className="meeting-modal-footer">
+            <button 
+              type="button" 
+              className="meeting-cancel-btn" 
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              className="meeting-create-btn"
+            >
+              Create Meeting
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
